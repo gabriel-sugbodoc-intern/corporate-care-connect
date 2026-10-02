@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Keep booking persistence browser-only and explicitly label mock prices, service details, and file uploads, because this product is currently a frontend demonstration.
+
+- Corporate plan data lives in src/lib/corporate.ts and is stored in browser localStorage — the site is a frontend-only demo with no backend.
