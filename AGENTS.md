@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep booking persistence browser-only and explicitly label mock prices, service details, and file uploads, because this product is currently a frontend demonstration.
+
+- Corporate plan data lives in src/lib/corporate.ts and is stored in browser localStorage — the site is a frontend-only demo with no backend.
