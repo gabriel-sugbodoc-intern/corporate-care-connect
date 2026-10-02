@@ -42,7 +42,7 @@ function BookPage() {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [f, setF] = useState({
-    patientType: (type ?? "") as PatientType | "", companyName: "", companyEmail: "", employeeId: "", authorizationLetterName: "",
+    patientType: (type ?? "") as PatientType | "", companyName: "", companyEmail: "", employeeId: "",
     serviceId: SERVICES.some((s) => s.id === service) ? (service ?? "") : "",
     date: "", time: "", name: "", age: "", sex: "", mobile: "", email: "", notes: "", hasRequest: false,
   });
