@@ -18,6 +18,7 @@ const nav = [
   { to: "/services", label: "Services" },
   { to: "/book", label: "Book Appointment" },
   { to: "/manage", label: "Manage Booking" },
+  { to: "/corporate", label: "Corporate Plans" },
 ] as const;
 
 export function Header() {
@@ -69,7 +70,7 @@ export function Footer() {
         </div>
       </div>
       <p className="border-t border-primary-foreground/20 py-4 text-center text-xs opacity-85">
-        This is a demo. Appointments are not actually submitted. © {new Date().getFullYear()} AnyoneClinic
+        This is a demo. Nothing is actually submitted. © {new Date().getFullYear()} AnyoneClinic
       </p>
     </footer>
   );
@@ -86,7 +87,7 @@ export function FloatingBook() {
 export function DemoBanner() {
   return (
     <div className="no-print bg-secondary px-4 py-2 text-center text-xs font-semibold text-secondary-foreground">
-      This is a demo. Appointments are not actually submitted.
+      This is a demo. Nothing is actually submitted.
     </div>
   );
 }

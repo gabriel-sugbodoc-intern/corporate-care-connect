@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Building2, User, Upload } from "lucide-react";
+import { Check, Building2, User } from "lucide-react";
 import { z } from "zod";
 import { PatientBadge } from "@/components/BookingCard";
 import { SERVICES, CORPORATE_SERVICES, paymentNote, type PatientType, TIME_SLOTS, isSlotFull, addBooking, formatDate, serviceName } from "@/lib/bookings";
@@ -28,7 +28,7 @@ const STEPS = ["Patient type", "Service", "Date & time", "Your details", "Review
 const corporateSchema = z.object({
   companyName: z.string().trim().min(2, "Please enter your company name.").max(100, "Company name must be 100 characters or fewer."),
   companyEmail: z.string().trim().min(1, "Please enter your work or company email.").email("Enter a valid company email, like name@company.com.").max(255, "Company email must be 255 characters or fewer."),
-  employeeId: z.string().trim().regex(/^[A-Za-z0-9-]{3,20}$/, "Enter your employee ID (3–20 letters, numbers, or dashes)."),
+  employeeId: z.string().trim().regex(/^[A-Za-z0-9-]{3,20}$/, "Enter your patient ID (3–20 letters, numbers, or dashes)."),
 });
 
 function todayStr() {
@@ -85,7 +85,7 @@ function BookPage() {
   const next = () => validate(step) && setStep(step + 1);
   const confirm = () => {
     const { patientType, ...rest } = f;
-    const b = addBooking({ ...rest, patientType: patientType || "walkin", ...(patientType !== "corporate" ? { companyName: "", companyEmail: "", employeeId: "", authorizationLetterName: "" } : {}), mobile: f.mobile.replace(/[\s-]/g, "") });
+    const b = addBooking({ ...rest, patientType: patientType || "walkin", ...(patientType !== "corporate" ? { companyName: "", companyEmail: "", employeeId: "" } : {}), mobile: f.mobile.replace(/[\s-]/g, "") });
     navigate({ to: "/booking/$reference", params: { reference: b.reference } });
   };
 
@@ -110,8 +110,8 @@ function BookPage() {
             <legend className="text-xl font-extrabold">Choose patient type</legend>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {([
-                ["corporate", Building2, "Corporate / Partner Company Employee", "For individuals covered by a company partnered with AnyoneClinic."],
-                ["walkin", User, "Walk-in Individual", "For individuals with no affiliation to the clinic or any company."],
+                ["corporate", Building2, "Partner Company Employee", "Covered by a company partnered with AnyoneClinic."],
+                ["walkin", User, "Walk-in Individual", "No company affiliation — no extra details needed."],
               ] as const).map(([id, Icon, title, desc]) => (
                 <label key={id} className={`cursor-pointer rounded-2xl border-2 p-4 ${f.patientType === id ? "border-accent bg-secondary" : ""}`}>
                   <input type="radio" name="ptype" className="sr-only" checked={f.patientType === id} onChange={() => setF((p) => ({ ...p, patientType: id, serviceId: "" }))} />
@@ -126,31 +126,11 @@ function BookPage() {
                 <Field id="companyName" label="Company name" err={errors["companyName"]} className="sm:col-span-2">
                   <input id="companyName" className="field" placeholder="Enter your company name" maxLength={100} value={f.companyName} onChange={(e) => set("companyName", e.target.value)} autoComplete="organization" />
                 </Field>
-                <Field id="companyEmail" label="Work / company email" err={errors["companyEmail"]}>
+                <Field id="companyEmail" label="Email" err={errors["companyEmail"]}>
                   <input id="companyEmail" type="email" className="field" placeholder="name@company.com" maxLength={255} value={f.companyEmail} onChange={(e) => set("companyEmail", e.target.value)} autoComplete="email" />
                 </Field>
-                <Field id="employeeId" label="Employee ID" err={errors["employeeId"]}>
+                <Field id="employeeId" label="Patient ID" err={errors["employeeId"]}>
                   <input id="employeeId" className="field" placeholder="e.g. EMP-12345" maxLength={20} value={f.employeeId} onChange={(e) => set("employeeId", e.target.value)} />
-                </Field>
-                <Field id="authorizationLetter" label="Authorization letter (optional — mock only)" err={errors["authorizationLetterName"]} className="sm:col-span-2">
-                  <label htmlFor="authorizationLetter" className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed bg-muted px-4 py-3 text-sm font-semibold">
-                    <Upload className="h-5 w-5 text-primary" />
-                    <span>{f.authorizationLetterName || "Choose a PDF, JPG, or PNG file"}</span>
-                  </label>
-                  <input id="authorizationLetter" type="file" className="sr-only" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) { set("authorizationLetterName", ""); return; }
-                    const allowed = ["application/pdf", "image/jpeg", "image/png"].includes(file.type);
-                    if (!allowed || file.size > 5 * 1024 * 1024) {
-                      set("authorizationLetterName", "");
-                      setErrors((p) => ({ ...p, authorizationLetterName: allowed ? "Please choose a file smaller than 5 MB." : "Please choose a PDF, JPG, or PNG file." }));
-                      e.target.value = "";
-                      return;
-                    }
-                    setErrors((p) => { const nextErrors = { ...p }; delete nextErrors.authorizationLetterName; return nextErrors; });
-                    set("authorizationLetterName", file.name.slice(0, 120));
-                  }} />
-                  <p className="mt-1 text-xs text-muted-foreground">The file name is shown for this demo; the file is not uploaded.</p>
                 </Field>
               </div>
             )}
@@ -258,8 +238,8 @@ function BookPage() {
             <div className="flex items-center justify-between gap-3"><h2 className="text-xl">Review and confirm</h2><PatientBadge type={f.patientType} /></div>
             <dl className="mt-4 divide-y text-sm">
               {[
-                ["Patient type", f.patientType === "corporate" ? "Corporate / Partner Patient" : "Walk-in Individual"],
-                ...(f.patientType === "corporate" ? [["Company", f.companyName], ["Company email", f.companyEmail], ["Employee ID", f.employeeId], ["Authorization letter", f.authorizationLetterName || "Not provided"]] : []),
+                ["Patient type", f.patientType === "corporate" ? "Partner Company Employee" : "Walk-in Individual"],
+                ...(f.patientType === "corporate" ? [["Company", f.companyName], ["Email (company)", f.companyEmail], ["Patient ID", f.employeeId]] : []),
                 ["Payment", paymentNote(f.patientType || undefined)],
                 ["Service", serviceName(f.serviceId)], ["Date", formatDate(f.date)], ["Time", f.time],
                 ["Name", f.name], ["Age / Sex", `${f.age} / ${f.sex}`], ["Mobile", f.mobile], ["Email", f.email || "—"],
@@ -268,7 +248,7 @@ function BookPage() {
                 <div key={k} className="flex justify-between gap-4 py-2"><dt className="text-muted-foreground">{k}</dt><dd className="text-right font-semibold">{v}</dd></div>
               ))}
             </dl>
-            <p className="mt-4 rounded-xl bg-secondary p-3 text-xs">This is a demo. Appointments are not actually submitted.</p>
+            <p className="mt-4 rounded-xl bg-secondary p-3 text-xs">This is a demo. Nothing is actually submitted.</p>
           </div>
         )}
 

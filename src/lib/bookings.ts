@@ -12,7 +12,6 @@ export const CORPORATE_SERVICES: Service[] = [
   { id: "annual-checkup", name: "Annual Check-up", desc: "Full lab panel, chest X-ray, and physician consultation. [Service details placeholder]", duration: "[Duration placeholder]", price: "[Price placeholder]" },
   { id: "monthly-checkup", name: "Monthly Check-up", desc: "Basic vitals, blood pressure, and a short lab screening. [Service details placeholder]", duration: "[Duration placeholder]", price: "[Price placeholder]" },
   { id: "pre-employment", name: "Pre-employment Medical Exam", desc: "A company-ready medical assessment package. [Service details placeholder]", duration: "[Duration placeholder]", price: "[Price placeholder]" },
-  { id: "group-scheduling", name: "Group / Department Scheduling", desc: "Optional coordinated scheduling for teams and departments. [Service details placeholder]", duration: "[Duration placeholder]", price: "[Price placeholder]" },
 ];
 
 export type PatientType = "corporate" | "walkin";
@@ -43,7 +42,6 @@ export type Booking = {
   companyName?: string;
   companyEmail?: string;
   employeeId?: string;
-  authorizationLetterName?: string;
   date: string;
   time: string;
   name: string;

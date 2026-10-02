@@ -20,9 +20,10 @@ export const BookingCard = forwardRef<HTMLDivElement, { booking: Booking }>(({ b
             <p className="text-2xl font-extrabold tracking-wider">{b.reference}</p>
           </div>
           <PatientBadge type={b.patientType} />
+          <Row k="Patient type" v={b.patientType === "corporate" ? "Partner Company Employee" : "Walk-in Individual"} />
           {b.patientType === "corporate" && <Row k="Company" v={b.companyName ?? "—"} />}
           {b.patientType === "corporate" && <Row k="Company email" v={b.companyEmail ?? "—"} />}
-          {b.patientType === "corporate" && <Row k="Employee ID" v={b.employeeId ?? "—"} />}
+          {b.patientType === "corporate" && <Row k="Patient ID" v={b.employeeId ?? "—"} />}
           <Row k="Payment" v={paymentNote(b.patientType)} />
           <Row k="Service" v={serviceName(b.serviceId)} />
           <Row k="Date & time" v={`${formatDate(b.date)} · ${b.time}`} />
