@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Copy, Check } from "lucide-react";
+import { StatusPill } from "@/components/StatusPill";
 import { getPlan, updatePlan, PACKAGES, packageTests, testName, peso, shortDate, type CorporatePlan, type EmpStatus } from "@/lib/corporate";
 
 export const Route = createFileRoute("/corporate/$companyId")({
@@ -19,14 +20,6 @@ export const Route = createFileRoute("/corporate/$companyId")({
 });
 
 const EMP_STATUSES: EmpStatus[] = ["Scheduled", "Checked in", "Completed", "No-show"];
-const tone: Record<string, string> = {
-  Scheduled: "bg-secondary text-secondary-foreground", "Checked in": "bg-accent text-accent-foreground",
-  Completed: "bg-success text-primary-foreground", "No-show": "bg-destructive text-destructive-foreground",
-  Pending: "bg-secondary text-secondary-foreground", Approved: "bg-success text-primary-foreground",
-  Rescheduled: "bg-accent text-accent-foreground", "Counter-proposed": "bg-primary text-primary-foreground",
-};
-export const StatusPill = ({ s }: { s: string }) => <span className={`inline-block rounded-full px-3 py-1 text-xs font-bold ${tone[s] ?? ""}`}>{s}</span>;
-
 function Dashboard() {
   const { companyId } = Route.useParams();
   const [plan, setPlan] = useState<CorporatePlan | undefined | null>(null);

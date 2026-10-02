@@ -14,6 +14,7 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as ManageRouteImport } from './routes/manage'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as BookingReferenceRouteImport } from './routes/booking.$reference'
+import { Route as CorporateCompanyIdRouteImport } from './routes/corporate.$companyId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const BookingReferenceRoute = BookingReferenceRouteImport.update({
   path: '/booking/$reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CorporateCompanyIdRoute = CorporateCompanyIdRouteImport.update({
+  id: '/corporate/$companyId',
+  path: '/corporate/$companyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/manage': typeof ManageRoute
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
+  '/corporate/$companyId': typeof CorporateCompanyIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/manage': typeof ManageRoute
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
+  '/corporate/$companyId': typeof CorporateCompanyIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,14 +70,33 @@ export interface FileRoutesById {
   '/manage': typeof ManageRoute
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
+  '/corporate/$companyId': typeof CorporateCompanyIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/book' | '/manage' | '/services' | '/booking/$reference'
+  fullPaths:
+    | '/'
+    | '/book'
+    | '/manage'
+    | '/services'
+    | '/booking/$reference'
+    | '/corporate/$companyId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/book' | '/manage' | '/services' | '/booking/$reference'
+  to:
+    | '/'
+    | '/book'
+    | '/manage'
+    | '/services'
+    | '/booking/$reference'
+    | '/corporate/$companyId'
   id:
-    '__root__' | '/' | '/book' | '/manage' | '/services' | '/booking/$reference'
+    | '__root__'
+    | '/'
+    | '/book'
+    | '/manage'
+    | '/services'
+    | '/booking/$reference'
+    | '/corporate/$companyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,6 +105,7 @@ export interface RootRouteChildren {
   ManageRoute: typeof ManageRoute
   ServicesRoute: typeof ServicesRoute
   BookingReferenceRoute: typeof BookingReferenceRoute
+  CorporateCompanyIdRoute: typeof CorporateCompanyIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/corporate/$companyId': {
+      id: '/corporate/$companyId'
+      path: '/corporate/$companyId'
+      fullPath: '/corporate/$companyId'
+      preLoaderRoute: typeof CorporateCompanyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -126,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManageRoute: ManageRoute,
   ServicesRoute: ServicesRoute,
   BookingReferenceRoute: BookingReferenceRoute,
+  CorporateCompanyIdRoute: CorporateCompanyIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
