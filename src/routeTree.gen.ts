@@ -14,6 +14,7 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as ManageRouteImport } from './routes/manage'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as BookingReferenceRouteImport } from './routes/booking.$reference'
+import { Route as CorporateIndexRouteImport } from './routes/corporate.index'
 import { Route as CorporateCompanyIdRouteImport } from './routes/corporate.$companyId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const BookingReferenceRoute = BookingReferenceRouteImport.update({
   path: '/booking/$reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CorporateIndexRoute = CorporateIndexRouteImport.update({
+  id: '/corporate/',
+  path: '/corporate/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CorporateCompanyIdRoute = CorporateCompanyIdRouteImport.update({
   id: '/corporate/$companyId',
   path: '/corporate/$companyId',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
   '/corporate/$companyId': typeof CorporateCompanyIdRoute
+  '/corporate/': typeof CorporateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
   '/corporate/$companyId': typeof CorporateCompanyIdRoute
+  '/corporate': typeof CorporateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/booking/$reference': typeof BookingReferenceRoute
   '/corporate/$companyId': typeof CorporateCompanyIdRoute
+  '/corporate/': typeof CorporateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/booking/$reference'
     | '/corporate/$companyId'
+    | '/corporate/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/booking/$reference'
     | '/corporate/$companyId'
+    | '/corporate'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/booking/$reference'
     | '/corporate/$companyId'
+    | '/corporate/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   BookingReferenceRoute: typeof BookingReferenceRoute
   CorporateCompanyIdRoute: typeof CorporateCompanyIdRoute
+  CorporateIndexRoute: typeof CorporateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/corporate/': {
+      id: '/corporate/'
+      path: '/corporate'
+      fullPath: '/corporate/'
+      preLoaderRoute: typeof CorporateIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/corporate/$companyId': {
       id: '/corporate/$companyId'
       path: '/corporate/$companyId'
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   BookingReferenceRoute: BookingReferenceRoute,
   CorporateCompanyIdRoute: CorporateCompanyIdRoute,
+  CorporateIndexRoute: CorporateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
